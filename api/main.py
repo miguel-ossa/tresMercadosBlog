@@ -21,9 +21,15 @@ def home():
     # return 'Hello, World!'
     return render_template("index.html")
 
-@app.route('/about')
+# @app.route('/about')
+# def about():
+#     return 'About'
+
+
+@app.route("/about")
 def about():
-    return 'About'
+    return render_template("about.html", current_user=current_user)
+
 
 
 if __name__ == "__main__":
