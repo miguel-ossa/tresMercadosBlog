@@ -39,7 +39,11 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return db.get_or_404(User, user_id)
+    try:
+        return db.get_or_404(User, user_id)
+    except:
+        time.sleep(1)
+        return db.get_or_404(User, user_id)
 
 
 # For adding profile images to the comment section
@@ -131,7 +135,11 @@ def register():
     if form.validate_on_submit():
 
         # Check if user email is already present in the database.
-        result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        try:
+            result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        except:
+            time.sleep(1)
+            result = db.session.execute(db.select(User).where(User.email == form.email.data))
 
         user = result.scalar()
         if user:
@@ -162,7 +170,11 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         password = form.password.data
-        result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        try:
+            result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        except:
+            time.sleep(1)
+            result = db.session.execute(db.select(User).where(User.email == form.email.data))
         # Note, email in db is unique so will only have one result.
         user = result.scalar()
         # Email doesn't exist
@@ -188,7 +200,11 @@ def logout():
 
 @app.route('/')
 def get_all_posts():
-    result = db.session.execute(db.select(BlogPost))
+    try:
+        result = db.session.execute(db.select(BlogPost))
+    except:
+        time.sleep(1)
+        result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
@@ -196,7 +212,11 @@ def get_all_posts():
 # Add a POST method to be able to post comments
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
-    requested_post = db.get_or_404(BlogPost, post_id)
+    try:
+        requested_post = db.get_or_404(BlogPost, post_id)
+    except:
+        time.sleep(1)
+        requested_post = db.get_or_404(BlogPost, post_id)
     # Add the CommentForm to the route
     comment_form = CommentForm()
     # Only allow logged-in users to comment on posts
@@ -238,7 +258,11 @@ def add_new_post():
 # Use a decorator so only an admin user can edit a post
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
-    post = db.get_or_404(BlogPost, post_id)
+    try:
+        post = db.get_or_404(BlogPost, post_id)
+    except:
+        time.sleep(1)
+        post = db.get_or_404(BlogPost, post_id)
     edit_form = CreatePostForm(
         title=post.title,
         subtitle=post.subtitle,
