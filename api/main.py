@@ -13,6 +13,7 @@ from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 import time
 import sys
 
+# TODO: implementar older posts
 '''
 Make sure the required packages are installed: 
 Open the Terminal in PyCharm (bottom left). 
@@ -38,11 +39,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    try:
-        return db.get_or_404(User, user_id)
-    except:
-        e = sys.exc_info()[0]
-        print("<p>Error: %s</p>" % e)
+    return db.get_or_404(User, user_id)
 
 
 # For adding profile images to the comment section
@@ -134,11 +131,7 @@ def register():
     if form.validate_on_submit():
 
         # Check if user email is already present in the database.
-        try:
-            result = db.session.execute(db.select(User).where(User.email == form.email.data))
-        except:
-            e = sys.exc_info()[0]
-            print("<p>Error: %s</p>" % e)
+        result = db.session.execute(db.select(User).where(User.email == form.email.data))
 
         user = result.scalar()
         if user:
@@ -169,11 +162,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         password = form.password.data
-        try:
-            result = db.session.execute(db.select(User).where(User.email == form.email.data))
-        except:
-            e = sys.exc_info()[0]
-            print("<p>Error: %s</p>" % e)
+        result = db.session.execute(db.select(User).where(User.email == form.email.data))
         # Note, email in db is unique so will only have one result.
         user = result.scalar()
         # Email doesn't exist
@@ -199,11 +188,7 @@ def logout():
 
 @app.route('/')
 def get_all_posts():
-    try:
-        result = db.session.execute(db.select(BlogPost))
-    except:
-        e = sys.exc_info()[0]
-        print("<p>Error: %s</p>" % e)
+    result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
@@ -211,11 +196,7 @@ def get_all_posts():
 # Add a POST method to be able to post comments
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
-    try:
-        requested_post = db.get_or_404(BlogPost, post_id)
-    except:
-        e = sys.exc_info()[0]
-        print("<p>Error: %s</p>" % e)
+    requested_post = db.get_or_404(BlogPost, post_id)
     # Add the CommentForm to the route
     comment_form = CommentForm()
     # Only allow logged-in users to comment on posts
@@ -257,11 +238,7 @@ def add_new_post():
 # Use a decorator so only an admin user can edit a post
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
-    try:
-        post = db.get_or_404(BlogPost, post_id)
-    except:
-        e = sys.exc_info()[0]
-        print("<p>Error: %s</p>" % e)
+    post = db.get_or_404(BlogPost, post_id)
     edit_form = CreatePostForm(
         title=post.title,
         subtitle=post.subtitle,
@@ -284,11 +261,7 @@ def edit_post(post_id):
 @app.route("/delete/<int:post_id>")
 @admin_only
 def delete_post(post_id):
-    try:
-        post_to_delete = db.get_or_404(BlogPost, post_id)
-    except:
-        e = sys.exc_info()[0]
-        print("<p>Error: %s</p>" % e)
+    post_to_delete = db.get_or_404(BlogPost, post_id)
     db.session.delete(post_to_delete)
     db.session.commit()
     return redirect(url_for('get_all_posts'))
