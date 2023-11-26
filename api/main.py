@@ -116,7 +116,7 @@ def admin_only(f):
             if current_user.id != 1:
                 return abort(403)
         except AttributeError:
-            return("Nice try!")
+            return "Nice try!"
         # Otherwise continue with the route function
         return f(*args, **kwargs)
 
