@@ -10,7 +10,7 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
-
+import time
 
 '''
 Make sure the required packages are installed: 
@@ -25,7 +25,6 @@ pip3 install -r requirements.txt
 This will install the packages from the requirements.txt for this project.
 '''
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_KEY')
 ckeditor = CKEditor(app)
@@ -38,7 +37,11 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return db.get_or_404(User, user_id)
+    try:
+        return db.get_or_404(User, user_id)
+    except:
+        e = sys.exc_info()[0]
+        print("<p>Error: %s</p>" % e)
 
 
 # For adding profile images to the comment section
@@ -130,7 +133,12 @@ def register():
     if form.validate_on_submit():
 
         # Check if user email is already present in the database.
-        result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        try:
+            result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        except:
+            e = sys.exc_info()[0]
+            print("<p>Error: %s</p>" % e)
+
         user = result.scalar()
         if user:
             # User already exists
@@ -160,7 +168,11 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         password = form.password.data
-        result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        try:
+            result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        except:
+            e = sys.exc_info()[0]
+            print("<p>Error: %s</p>" % e)
         # Note, email in db is unique so will only have one result.
         user = result.scalar()
         # Email doesn't exist
@@ -186,7 +198,11 @@ def logout():
 
 @app.route('/')
 def get_all_posts():
-    result = db.session.execute(db.select(BlogPost))
+    try:
+        result = db.session.execute(db.select(BlogPost))
+    except:
+        e = sys.exc_info()[0]
+        print("<p>Error: %s</p>" % e)
     posts = result.scalars().all()
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
@@ -194,7 +210,11 @@ def get_all_posts():
 # Add a POST method to be able to post comments
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
-    requested_post = db.get_or_404(BlogPost, post_id)
+    try:
+        requested_post = db.get_or_404(BlogPost, post_id)
+    except:
+        e = sys.exc_info()[0]
+        print("<p>Error: %s</p>" % e)
     # Add the CommentForm to the route
     comment_form = CommentForm()
     # Only allow logged-in users to comment on posts
@@ -236,7 +256,11 @@ def add_new_post():
 # Use a decorator so only an admin user can edit a post
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
-    post = db.get_or_404(BlogPost, post_id)
+    try:
+        post = db.get_or_404(BlogPost, post_id)
+    except:
+        e = sys.exc_info()[0]
+        print("<p>Error: %s</p>" % e)
     edit_form = CreatePostForm(
         title=post.title,
         subtitle=post.subtitle,
@@ -259,7 +283,11 @@ def edit_post(post_id):
 @app.route("/delete/<int:post_id>")
 @admin_only
 def delete_post(post_id):
-    post_to_delete = db.get_or_404(BlogPost, post_id)
+    try:
+        post_to_delete = db.get_or_404(BlogPost, post_id)
+    except:
+        e = sys.exc_info()[0]
+        print("<p>Error: %s</p>" % e)
     db.session.delete(post_to_delete)
     db.session.commit()
     return redirect(url_for('get_all_posts'))
@@ -268,6 +296,7 @@ def delete_post(post_id):
 @app.route("/about")
 def about():
     return render_template("about.html", current_user=current_user)
+
 
 @app.route("/donate")
 def donate():
