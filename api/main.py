@@ -11,9 +11,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 import time
-import sys
 
 # TODO: implementar older posts
+# TODO: informar de la cuenta conectada en la esquina superior derecha
 '''
 Make sure the required packages are installed: 
 Open the Terminal in PyCharm (bottom left). 
@@ -135,16 +135,12 @@ def register():
     if form.validate_on_submit():
 
         # Check if user email is already present in the database.
-        try:
-            result = db.session.execute(db.select(User).where(User.email == form.email.data))
-        except:
-            time.sleep(1)
-            result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        result = db.session.execute(db.select(User).where(User.email == form.email.data))
 
         user = result.scalar()
         if user:
             # User already exists
-            flash("You've already signed up with that email, log in instead!")
+            flash("Já se inscreveu com esse e-mail, inicie sessão em vez disso!")
             return redirect(url_for('login'))
 
         hash_and_salted_password = generate_password_hash(
@@ -170,20 +166,16 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         password = form.password.data
-        try:
-            result = db.session.execute(db.select(User).where(User.email == form.email.data))
-        except:
-            time.sleep(1)
-            result = db.session.execute(db.select(User).where(User.email == form.email.data))
+        result = db.session.execute(db.select(User).where(User.email == form.email.data))
         # Note, email in db is unique so will only have one result.
         user = result.scalar()
         # Email doesn't exist
         if not user:
-            flash("That email does not exist, please try again.")
+            flash("Esse e-mail não existe, por favor tente novamente.")
             return redirect(url_for('login'))
         # Password incorrect
         elif not check_password_hash(user.password, password):
-            flash('Password incorrect, please try again.')
+            flash('Palavra-passe incorrecta, tente novamente.')
             return redirect(url_for('login'))
         else:
             login_user(user)
@@ -200,11 +192,7 @@ def logout():
 
 @app.route('/')
 def get_all_posts():
-    try:
-        result = db.session.execute(db.select(BlogPost))
-    except:
-        time.sleep(1)
-        result = db.session.execute(db.select(BlogPost))
+    result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
@@ -212,17 +200,13 @@ def get_all_posts():
 # Add a POST method to be able to post comments
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
-    try:
-        requested_post = db.get_or_404(BlogPost, post_id)
-    except:
-        time.sleep(1)
-        requested_post = db.get_or_404(BlogPost, post_id)
+    requested_post = db.get_or_404(BlogPost, post_id)
     # Add the CommentForm to the route
     comment_form = CommentForm()
     # Only allow logged-in users to comment on posts
     if comment_form.validate_on_submit():
         if not current_user.is_authenticated:
-            flash("You need to login or register to comment.")
+            flash("É necessário fazer login ou registar-se para comentar.")
             return redirect(url_for("login"))
 
         new_comment = Comment(
@@ -258,11 +242,7 @@ def add_new_post():
 # Use a decorator so only an admin user can edit a post
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
-    try:
-        post = db.get_or_404(BlogPost, post_id)
-    except:
-        time.sleep(1)
-        post = db.get_or_404(BlogPost, post_id)
+    post = db.get_or_404(BlogPost, post_id)
     edit_form = CreatePostForm(
         title=post.title,
         subtitle=post.subtitle,
