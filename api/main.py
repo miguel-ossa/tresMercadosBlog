@@ -13,7 +13,6 @@ from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 import time
 
 # TODO: implementar older posts
-# TODO: informar de la cuenta conectada en la esquina superior derecha
 
 '''
 Make sure the required packages are installed: 
