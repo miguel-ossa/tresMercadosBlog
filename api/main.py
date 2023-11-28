@@ -10,9 +10,9 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
+from doubleLinkedList import DoubleLinkedList
 
 # TODO: implementar older posts
-# TODO: implementar anterior y siguiente post
 
 '''
 Make sure the required packages are installed: 
@@ -35,6 +35,8 @@ Bootstrap5(app)
 # Configure Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+DLL = DoubleLinkedList()
 
 
 @login_manager.user_loader
@@ -190,13 +192,31 @@ def logout():
 def get_all_posts():
     result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
+    # Create a double linked list
+    # Append elements from the list to the double linked list
+    [DLL.append(item) for item in posts]
+    DLL.display()
+    # for post in posts:
+    #     current_blogpost = dll.get(post)
+    #     print(current_blogpost.data.body)
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
 
 # Add a POST method to be able to post comments
+# @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
+    # post_id = request.args.get('post_id', None)
+    # node = request.args.get('node', None)
     requested_post = db.get_or_404(BlogPost, post_id)
+    # Get the node for this post
+    node = DLL.get(requested_post)
+    next_post = None
+    prev_post = None
+    if (node.next_node != None):
+        next_post = node.next_node.data.id
+    if (node.prev_node != None):
+        prev_post = node.prev_node.data.id
     # Add the CommentForm to the route
     comment_form = CommentForm()
     # Only allow logged-in users to comment on posts
@@ -212,7 +232,8 @@ def show_post(post_id):
         )
         db.session.add(new_comment)
         db.session.commit()
-    return render_template("post.html", post=requested_post, current_user=current_user, form=comment_form)
+    return render_template("post.html", post=requested_post, next_post=next_post, prev_post=prev_post,
+                           current_user=current_user, form=comment_form)
 
 
 # Use a decorator so only an admin user can create new posts

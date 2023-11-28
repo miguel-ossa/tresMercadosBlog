@@ -27,6 +27,19 @@
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
         {{ post.body|safe }}
+        <div class="row">
+          <div class="col-md">
+            {% if prev_post != None %}
+              <a link href="{{ url_for('show_post', post_id=prev_post) }}"><< Publicação anterior</a>
+            {% endif %}
+          </div>
+          <div class="col-md"></div>
+          <div class="col-md">
+            {% if next_post != None %}
+              <a link href="{{ url_for('show_post', post_id=next_post) }}">Próxima Publicação >></a>
+            {% endif %}
+          </div>
+        </div>
         <!--Only show Edit Post button if user id is 1 (admin user) -->
         {% if current_user.id == 1 %}
         <div class="d-flex justify-content-end mb-4">
