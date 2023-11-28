@@ -10,9 +10,9 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
-import time
 
 # TODO: implementar older posts
+# TODO: implementar anterior y siguiente post
 
 '''
 Make sure the required packages are installed: 
@@ -39,11 +39,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    try:
-        return db.get_or_404(User, user_id)
-    except:
-        time.sleep(1)
-        return db.get_or_404(User, user_id)
+    return db.get_or_404(User, user_id)
 
 
 # For adding profile images to the comment section
