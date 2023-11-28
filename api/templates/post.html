@@ -30,15 +30,18 @@
         <div class="row">
           <div class="col-md">
             {% if prev_post != None %}
-              <a link href="{{ url_for('show_post', post_id=prev_post) }}"><< Publicação anterior</a>
+              <a link href="{{ url_for('show_post', post_id=prev_post) }}">👈 Publicação anterior</a>
             {% endif %}
           </div>
           <div class="col-md"></div>
           <div class="col-md">
             {% if next_post != None %}
-              <a link href="{{ url_for('show_post', post_id=next_post) }}">Próxima Publicação >></a>
+              <a link href="{{ url_for('show_post', post_id=next_post) }}">Próxima Publicação 👉</a>
             {% endif %}
           </div>
+        </div>
+        <div class="row">
+          &nbsp;
         </div>
         <!--Only show Edit Post button if user id is 1 (admin user) -->
         {% if current_user.id == 1 %}

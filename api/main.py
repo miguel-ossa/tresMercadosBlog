@@ -192,8 +192,8 @@ def logout():
 def get_all_posts():
     result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
-    # Create a double linked list
     # Append elements from the list to the double linked list
+    DLL.erase_all_data()
     [DLL.append(item) for item in posts]
     DLL.display()
     # for post in posts:
@@ -213,9 +213,9 @@ def show_post(post_id):
     node = DLL.get(requested_post)
     next_post = None
     prev_post = None
-    if (node.next_node != None):
+    if node.next_node is not None:
         next_post = node.next_node.data.id
-    if (node.prev_node != None):
+    if node.prev_node is not None:
         prev_post = node.prev_node.data.id
     # Add the CommentForm to the route
     comment_form = CommentForm()

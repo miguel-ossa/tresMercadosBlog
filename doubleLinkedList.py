@@ -28,6 +28,9 @@ class DoubleLinkedList:
             current = current.next_node
         return None
 
+    def erase_all_data(self):
+        self.head = None
+        self.tail = None
     def display(self):
         current = self.head
         while current:
