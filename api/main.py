@@ -156,6 +156,7 @@ def register():
         # This line will authenticate the user with Flask-Login
         login_user(new_user)
         return redirect(url_for("get_all_posts"))
+
     return render_template("register.html", form=form, current_user=current_user)
 
 
@@ -195,10 +196,7 @@ def get_all_posts():
     # Append all elements from the list to the double linked list
     DLL.erase_all_data()
     [DLL.append(item) for item in posts]
-    DLL.display()
-    # for post in posts:
-    #     current_blogpost = dll.get(post)
-    #     print(current_blogpost.data.body)
+
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
 
@@ -206,8 +204,6 @@ def get_all_posts():
 # @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
-    # post_id = request.args.get('post_id', None)
-    # node = request.args.get('node', None)
     requested_post = db.get_or_404(BlogPost, post_id)
     # Get the node for this post
     node = DLL.get(requested_post)
@@ -216,7 +212,6 @@ def show_post(post_id):
     if node is not None:
         if node.next_node is not None:
             next_post = node.next_node.data.id
-    if node is not None:
         if node.prev_node is not None:
             prev_post = node.prev_node.data.id
     # Add the CommentForm to the route
@@ -234,6 +229,7 @@ def show_post(post_id):
         )
         db.session.add(new_comment)
         db.session.commit()
+
     return render_template("post.html", post=requested_post, next_post=next_post, prev_post=prev_post,
                            current_user=current_user, form=comment_form)
 
@@ -255,6 +251,7 @@ def add_new_post():
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("get_all_posts"))
+
     return render_template("make-post.html", form=form, current_user=current_user)
 
 
@@ -277,6 +274,7 @@ def edit_post(post_id):
         post.body = edit_form.body.data
         db.session.commit()
         return redirect(url_for("show_post", post_id=post.id))
+
     return render_template("make-post.html", form=edit_form, is_edit=True, current_user=current_user)
 
 
