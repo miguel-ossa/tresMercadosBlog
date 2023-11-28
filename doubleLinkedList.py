@@ -31,6 +31,7 @@ class DoubleLinkedList:
     def erase_all_data(self):
         self.head = None
         self.tail = None
+
     def display(self):
         current = self.head
         while current:
