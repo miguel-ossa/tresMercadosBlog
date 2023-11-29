@@ -28,15 +28,15 @@
       <div class="col-md-10 col-lg-8 col-xl-7">
         {{ post.body|safe }}
         <div class="row">
-          <div class="col">
+          <div class="col-md">
             {% if prev_post != None %}
-              <a link href="{{ url_for('show_post', post_id=prev_post) }}">👈👈👈</a>
+              <a link href="{{ url_for('show_post', post_id=prev_post) }}">Ant.</a>
             {% endif %}
           </div>
-          <div class="col"></div>
-          <div class="col">
+          <div class="col-md"></div>
+          <div class="col-md">
             {% if next_post != None %}
-              <a link href="{{ url_for('show_post', post_id=next_post) }}">👉👉👉</a>
+              <a link href="{{ url_for('show_post', post_id=next_post) }}">Seg.</a>
             {% endif %}
           </div>
         </div>
