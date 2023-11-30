@@ -29,15 +29,15 @@
         {{ post.body|safe }}
         <div class="row">
           <div class="col-md">
-            {% if prev_post != None %}
+<!--            {% if prev_post != None %}-->
               <a link href="{{ url_for('show_post', post_id=prev_post) }}">◀️Publicação anterior</a>
-            {% endif %}
+<!--            {% endif %}-->
           </div>
           <div class="col-md">&nbsp;</div>
           <div class="col-md">
-            {% if next_post != None %}
+<!--            {% if next_post != None %}-->
               <a link href="{{ url_for('show_post', post_id=next_post) }}">Próxima Publicação▶️</a>
-            {% endif %}
+<!--            {% endif %}-->
           </div>
         </div>
         <div class="row">
