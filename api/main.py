@@ -205,24 +205,15 @@ def get_all_posts():
 # @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
-    # Something happens with the server,
-    # maybe with the db, so try to solve it...
-    is_ok = False
-    while not is_ok:
-        requested_post = db.get_or_404(BlogPost, post_id)
-        # Get the node for this post
-        node = DLL.get(requested_post)
-        next_post = None
-        prev_post = None
-        try:
-            if node.next_node is not None:
-                next_post = node.next_node.data.id
-            if node.prev_node is not None:
-                prev_post = node.prev_node.data.id
-        except AttributeError:
-            time.sleep(2)
-        else:
-            is_ok = True
+    requested_post = db.get_or_404(BlogPost, post_id)
+    # Get the node for this post
+    node = DLL.get(requested_post)
+    next_post = None
+    prev_post = None
+    if node.next_node is not None:
+        next_post = node.next_node.data.id
+    if node.prev_node is not None:
+        prev_post = node.prev_node.data.id
     # Add the CommentForm to the route
     comment_form = CommentForm()
     # Only allow logged-in users to comment on posts
