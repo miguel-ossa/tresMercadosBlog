@@ -39,8 +39,6 @@ Bootstrap5(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-DLL = DoubleLinkedList()
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -192,15 +190,23 @@ def logout():
     return redirect(url_for('get_all_posts'))
 
 
-@app.route('/')
-def get_all_posts():
+def save_in_dll(posts):
+    dll = DoubleLinkedList()
+    dll.erase_all_data()
+    [dll.append(item) for item in posts]
+    logging.debug(dll.display())
+    return dll
+
+
+def load_posts():
     result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
-    # Append all elements from the list to the double linked list
-    DLL.erase_all_data()
-    [DLL.append(item) for item in posts]
-    logging.debug(DLL.display())
+    return posts
 
+
+@app.route('/')
+def get_all_posts():
+    posts = load_posts()
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
 
@@ -208,17 +214,13 @@ def get_all_posts():
 # @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
-    # Load all posts and init DLL
-    result = db.session.execute(db.select(BlogPost))
-    posts = result.scalars().all()
-    # Append all elements from the list to the double linked list
-    DLL.erase_all_data()
-    [DLL.append(item) for item in posts]
+    posts = load_posts()
+    dll = save_in_dll(posts)
 
     requested_post = db.get_or_404(BlogPost, post_id)
-    logging.debug(DLL.display())
+    logging.debug(dll.display())
     # Get the node for this post
-    node = DLL.get(requested_post)
+    node = dll.get(requested_post)
     next_post = None
     prev_post = None
     try:
