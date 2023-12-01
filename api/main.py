@@ -190,7 +190,7 @@ def logout():
     return redirect(url_for('get_all_posts'))
 
 
-def save_in_dll(posts):
+def convert_posts_to_dll(posts):
     dll = DoubleLinkedList()
     dll.erase_all_data()
     [dll.append(item) for item in posts]
@@ -215,7 +215,7 @@ def get_all_posts():
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
     posts = load_posts()
-    dll = save_in_dll(posts)
+    dll = convert_posts_to_dll(posts)
 
     requested_post = db.get_or_404(BlogPost, post_id)
     logging.debug(dll.display())
