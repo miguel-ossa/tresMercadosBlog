@@ -208,6 +208,13 @@ def get_all_posts():
 # @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
+    # Load all posts and init DLL
+    result = db.session.execute(db.select(BlogPost))
+    posts = result.scalars().all()
+    # Append all elements from the list to the double linked list
+    DLL.erase_all_data()
+    [DLL.append(item) for item in posts]
+
     requested_post = db.get_or_404(BlogPost, post_id)
     logging.debug(DLL.display())
     # Get the node for this post
