@@ -215,7 +215,7 @@ def show_post(post_id):
         if node.prev_node is not None:
             prev_post = node.prev_node.data.id
     except AttributeError:
-        show_post(post_id)
+        pass
     # Add the CommentForm to the route
     comment_form = CommentForm()
     # Only allow logged-in users to comment on posts
