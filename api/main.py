@@ -1,5 +1,4 @@
 import os
-import time
 from datetime import date
 from flask import Flask, abort, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap5
@@ -12,6 +11,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from doubleLinkedList import DoubleLinkedList
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 # TODO: implementar older posts
 
@@ -197,6 +199,7 @@ def get_all_posts():
     # Append all elements from the list to the double linked list
     DLL.erase_all_data()
     [DLL.append(item) for item in posts]
+    logging.debug(DLL.display())
 
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
@@ -206,6 +209,7 @@ def get_all_posts():
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
     requested_post = db.get_or_404(BlogPost, post_id)
+    logging.debug(DLL.display())
     # Get the node for this post
     node = DLL.get(requested_post)
     next_post = None
