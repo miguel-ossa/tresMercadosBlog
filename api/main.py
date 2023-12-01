@@ -205,11 +205,11 @@ def get_all_posts():
 # @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
-    requested_post = db.get_or_404(BlogPost, post_id)
     # Something happens with the server,
     # maybe with the db, so try to solve it...
     is_ok = False
     while not is_ok:
+        requested_post = db.get_or_404(BlogPost, post_id)
         # Get the node for this post
         node = DLL.get(requested_post)
         next_post = None
