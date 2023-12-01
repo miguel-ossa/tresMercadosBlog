@@ -1,4 +1,5 @@
 import os
+import time
 from datetime import date
 from flask import Flask, abort, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap5
@@ -205,9 +206,11 @@ def get_all_posts():
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
     requested_post = db.get_or_404(BlogPost, post_id)
-    # Get the node for this post
+    # Something happens with the server,
+    # maybe with the db, so try to solve it...
     is_ok = False
     while not is_ok:
+        # Get the node for this post
         node = DLL.get(requested_post)
         next_post = None
         prev_post = None
@@ -217,7 +220,7 @@ def show_post(post_id):
             if node.prev_node is not None:
                 prev_post = node.prev_node.data.id
         except AttributeError:
-            pass
+            time.sleep(1)
         else:
             is_ok = True
     # Add the CommentForm to the route
