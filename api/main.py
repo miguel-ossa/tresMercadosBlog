@@ -210,10 +210,13 @@ def show_post(post_id):
     node = DLL.get(requested_post)
     next_post = None
     prev_post = None
-    if node.next_node is not None:
-        next_post = node.next_node.data.id
-    if node.prev_node is not None:
-        prev_post = node.prev_node.data.id
+    try:
+        if node.next_node is not None:
+            next_post = node.next_node.data.id
+        if node.prev_node is not None:
+            prev_post = node.prev_node.data.id
+    except AttributeError:
+        pass
     # Add the CommentForm to the route
     comment_form = CommentForm()
     # Only allow logged-in users to comment on posts
