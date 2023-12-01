@@ -220,7 +220,7 @@ def show_post(post_id):
             if node.prev_node is not None:
                 prev_post = node.prev_node.data.id
         except AttributeError:
-            time.sleep(1)
+            time.sleep(2)
         else:
             is_ok = True
     # Add the CommentForm to the route
