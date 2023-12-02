@@ -23,14 +23,10 @@ class DoubleLinkedList:
     def get(self, data):
         current = self.head
         while current:
-            if current.data.id == data.id:
+            if current.data == data:
                 return current
             current = current.next_node
         return None
-
-    def erase_all_data(self):
-        self.head = None
-        self.tail = None
 
     def display(self):
         current = self.head

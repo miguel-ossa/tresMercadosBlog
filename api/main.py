@@ -15,7 +15,6 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-# TODO: implementar older posts
 
 '''
 Make sure the required packages are installed: 
@@ -192,8 +191,7 @@ def logout():
 
 def convert_posts_to_dll(posts):
     dll = DoubleLinkedList()
-    dll.erase_all_data()
-    [dll.append(item) for item in posts]
+    [dll.append(item.id) for item in posts]
     logging.debug(dll.display())
     return dll
 
@@ -218,16 +216,15 @@ def show_post(post_id):
     dll = convert_posts_to_dll(posts)
 
     requested_post = db.get_or_404(BlogPost, post_id)
-    logging.debug(dll.display())
     # Get the node for this post
-    node = dll.get(requested_post)
+    node = dll.get(requested_post.id)
     next_post = None
     prev_post = None
     try:
         if node.next_node is not None:
-            next_post = node.next_node.data.id
+            next_post = node.next_node.data
         if node.prev_node is not None:
-            prev_post = node.prev_node.data.id
+            prev_post = node.prev_node.data
     except AttributeError:
         pass
     # Add the CommentForm to the route
