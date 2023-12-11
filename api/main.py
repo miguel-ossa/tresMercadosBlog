@@ -16,6 +16,7 @@ from sqlalchemy.sql import text
 
 logging.basicConfig(level=logging.DEBUG)
 
+# TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML
 
 '''
 Make sure the required packages are installed: 
