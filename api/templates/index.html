@@ -27,8 +27,10 @@
           <h2 class="post-title">{{ post.title }}</h2>
           <h3 class="post-subtitle">{{ post.subtitle }}</h3>
         </a>
+          <span class="meta">
+            Posted on {{ post.date }}
+          </span>
         <p class="post-meta">
-          Posted on {{post.date}}
           <!-- Only show delete button if user id is 1 (admin user) -->
           {% if current_user.id == 1: %}
           <a href="{{url_for('delete_post', post_id=post.id) }}">✘</a>
