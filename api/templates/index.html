@@ -28,11 +28,7 @@
           <h3 class="post-subtitle">{{ post.subtitle }}</h3>
         </a>
         <p class="post-meta">
-          {{post.date}}
-<!--          Posted by-->
-<!--          &lt;!&ndash; post.author.name is now a User object &ndash;&gt;-->
-<!--          <a href="#">{{post.author.name}}</a>-->
-<!--          on {{post.date}}-->
+          Posted on {{post.date}}
           <!-- Only show delete button if user id is 1 (admin user) -->
           {% if current_user.id == 1: %}
           <a href="{{url_for('delete_post', post_id=post.id) }}">✘</a>
