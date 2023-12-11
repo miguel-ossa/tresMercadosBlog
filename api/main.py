@@ -12,6 +12,7 @@ from sqlalchemy.orm import relationship
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from doubleLinkedList import DoubleLinkedList
 import logging
+from sqlalchemy.sql import text
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -197,7 +198,7 @@ def convert_posts_to_dll(posts):
 
 
 def load_posts():
-    result = db.session.execute(db.select(BlogPost))
+    result = db.session.execute(db.select(BlogPost).order_by(text("date desc")))
     posts = result.scalars().all()
     return posts
 
