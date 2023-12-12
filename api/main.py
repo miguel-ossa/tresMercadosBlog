@@ -199,7 +199,7 @@ def convert_posts_to_dll(posts):
 
 
 def load_posts():
-    result = db.session.execute(db.select(BlogPost).order_by(text("date desc")))
+    result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
     return posts
 
