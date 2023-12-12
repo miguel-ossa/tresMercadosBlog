@@ -12,7 +12,6 @@ from sqlalchemy.orm import relationship
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from doubleLinkedList import DoubleLinkedList
 import logging
-from sqlalchemy.sql import text
 
 logging.basicConfig(level=logging.DEBUG)
 
