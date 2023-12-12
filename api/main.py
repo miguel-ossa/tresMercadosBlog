@@ -210,8 +210,6 @@ def get_all_posts():
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
 
-# Add a POST method to be able to post comments
-# @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
     posts = load_posts()
@@ -249,7 +247,6 @@ def show_post(post_id):
                            current_user=current_user, form=comment_form)
 
 
-# Use a decorator so only an admin user can create new posts
 @app.route("/new-post", methods=["GET", "POST"])
 @admin_only
 def add_new_post():
@@ -293,7 +290,6 @@ def edit_post(post_id):
     return render_template("make-post.html", form=edit_form, is_edit=True, current_user=current_user)
 
 
-# Use a decorator so only an admin user can delete a post
 @app.route("/delete/<int:post_id>")
 @admin_only
 def delete_post(post_id):
