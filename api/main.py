@@ -63,7 +63,12 @@ gravatar = Gravatar(app,
 
 # CONNECT TO DB
 # sqlite:///posts.db
-e = create_engine(os.environ.get('DB_URI'), pool_recycle=3600)
+
+# This parameter prevents the pool from using a particular connection that has passed a certain age,
+# and is appropriate for database backends such as MySQL that automatically close connections
+# that have been stale after a particular period of time
+# engine = create_engine(os.environ.get('DB_URI'), pool_recycle=3600)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
 db = SQLAlchemy()
 db.init_app(app)
