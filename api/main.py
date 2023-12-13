@@ -63,7 +63,7 @@ gravatar = Gravatar(app,
 
 # CONNECT TO DB
 # sqlite:///posts.db
-engine = create_engine(os.environ.get('DB_URI'), pool_pre_ping=True)
+e = create_engine(os.environ.get('DB_URI'), pool_recycle=3600)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
 db = SQLAlchemy()
 db.init_app(app)
