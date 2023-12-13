@@ -7,8 +7,10 @@ from flask_gravatar import Gravatar
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from doubleLinkedList import DoubleLinkedList
 import logging
@@ -22,6 +24,10 @@ Make sure the required packages are installed:
 Open the Terminal in PyCharm (bottom left). 
 
 On Windows type:
+
+pip install pipreqs
+pipreqs /path/to/project
+
 python -m pip install -r requirements.txt
 
 On MacOS type:
@@ -57,6 +63,7 @@ gravatar = Gravatar(app,
 
 # CONNECT TO DB
 # sqlite:///posts.db
+engine = create_engine(os.environ.get('DB_URI'), pool_pre_ping=True)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
 db = SQLAlchemy()
 db.init_app(app)
