@@ -210,6 +210,10 @@ def convert_posts_to_dll(posts):
 
 
 def load_posts():
+    try:
+        db.session.execute("SELECT FROM 1")
+    except:
+        pass
     result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
     return posts
