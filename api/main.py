@@ -15,7 +15,6 @@ from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from doubleLinkedList import DoubleLinkedList
 import logging
 
-
 logging.basicConfig(level=logging.DEBUG)
 
 # TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML
@@ -46,7 +45,8 @@ Bootstrap5(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-engine = create_engine(os.environ.get('DB_URI'))
+engine = create_engine(os.environ.get('DB_URI'), pool_pre_ping=True)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -74,6 +74,7 @@ gravatar = Gravatar(app,
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
 db = SQLAlchemy()
 db.init_app(app)
+
 
 # CONFIGURE TABLES
 class BlogPost(db.Model):
@@ -135,8 +136,6 @@ with app.app_context():
 #
 # start_timer()
 #
-
-
 
 
 # Create an admin-only decorator
