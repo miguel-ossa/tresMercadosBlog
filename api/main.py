@@ -225,8 +225,8 @@ def convert_posts_to_dll(posts):
 
 
 def load_posts():
-    with engine.connect() as connection:
-        result = db.session.execute(db.select(BlogPost))
+    engine.connect()
+    result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
     return posts
 
@@ -287,6 +287,7 @@ def add_new_post():
             author=current_user,
             date=date.today().strftime("%B %d, %Y")
         )
+        engine.connect()
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("get_all_posts"))
@@ -297,6 +298,7 @@ def add_new_post():
 # Use a decorator so only an admin user can edit a post
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
+    engine.connect()
     post = db.get_or_404(BlogPost, post_id)
     edit_form = CreatePostForm(
         title=post.title,
@@ -320,6 +322,7 @@ def edit_post(post_id):
 @app.route("/delete/<int:post_id>")
 @admin_only
 def delete_post(post_id):
+    engine.connect()
     post_to_delete = db.get_or_404(BlogPost, post_id)
     db.session.delete(post_to_delete)
     db.session.commit()
