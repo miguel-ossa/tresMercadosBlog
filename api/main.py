@@ -15,6 +15,7 @@ from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from doubleLinkedList import DoubleLinkedList
 import logging
 
+
 logging.basicConfig(level=logging.DEBUG)
 
 # TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML
@@ -26,7 +27,7 @@ Open the Terminal in PyCharm (bottom left).
 On Windows type:
 
 pip install pipreqs
-pipreqs /path/to/project
+pipreqs --force /path/to/project
 
 python -m pip install -r requirements.txt
 
@@ -45,6 +46,7 @@ Bootstrap5(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+engine = create_engine(os.environ.get('DB_URI'))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -72,7 +74,6 @@ gravatar = Gravatar(app,
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
 db = SQLAlchemy()
 db.init_app(app)
-
 
 # CONFIGURE TABLES
 class BlogPost(db.Model):
@@ -121,6 +122,21 @@ class Comment(db.Model):
 
 with app.app_context():
     db.create_all()
+
+
+# def do_something():
+#     sql = "SELECT FROM 1"
+#     result = db.session.execute(sql)
+#
+# def start_timer():
+#     t = threading.Timer(2, start_timer)
+#     t.start()
+#     do_something()
+#
+# start_timer()
+#
+
+
 
 
 # Create an admin-only decorator
@@ -210,7 +226,8 @@ def convert_posts_to_dll(posts):
 
 
 def load_posts():
-    result = db.session.execute(db.select(BlogPost))
+    with engine.connect() as connection:
+        result = db.session.execute(db.select(BlogPost))
     posts = result.scalars().all()
     return posts
 
