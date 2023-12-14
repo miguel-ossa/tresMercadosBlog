@@ -125,19 +125,6 @@ with app.app_context():
     db.create_all()
 
 
-# def do_something():
-#     sql = "SELECT FROM 1"
-#     result = db.session.execute(sql)
-#
-# def start_timer():
-#     t = threading.Timer(2, start_timer)
-#     t.start()
-#     do_something()
-#
-# start_timer()
-#
-
-
 # Create an admin-only decorator
 def admin_only(f):
     @wraps(f)
@@ -160,6 +147,10 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
 
+        try:
+            engine.connect()
+        except:
+            engine.connect()
         # Check if user email is already present in the database.
         result = db.session.execute(db.select(User).where(User.email == form.email.data))
 
@@ -193,6 +184,10 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         password = form.password.data
+        try:
+            engine.connect()
+        except:
+            engine.connect()
         result = db.session.execute(db.select(User).where(User.email == form.email.data))
         # Note, email in db is unique so will only have one result.
         user = result.scalar()
