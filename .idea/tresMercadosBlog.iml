@@ -8,9 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
-  <component name="PackageRequirementsSettings">
-    <option name="removeUnused" value="true" />
-  </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="3d16ca5e-ff7a-4ed9-adc8-94fafb69e737" />
   </component>
