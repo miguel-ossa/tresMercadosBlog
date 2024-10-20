@@ -1,6 +1,6 @@
 import os
 from datetime import date
-from flask import Flask, abort, render_template, redirect, url_for, flash
+from flask import Flask, abort, render_template, redirect, url_for, flash, jsonify
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from flask_gravatar import Gravatar
@@ -46,7 +46,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 engine = create_engine(os.environ.get('DB_URI'), pool_pre_ping=True)
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -120,10 +119,24 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
     parent_post = relationship("BlogPost", back_populates="comments")
 
-
 with app.app_context():
     db.create_all()
 
+# def list_users():
+#     users = User.query.all()
+#     user_list = []
+#     for user in users:
+#         user_list.append({
+#             "id": user.id,
+#             "email": user.email,
+#             "name": user.name
+#         })
+#     return user_list
+#
+# @app.route('/users')
+# def get_all_users():
+#     users = list_users()
+#     return jsonify(users)
 
 # Create an admin-only decorator
 def admin_only(f):
