@@ -9,6 +9,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PyDocumentationSettings">
+    <option name="analyzeDoctest" value="false" />
+  </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="3d16ca5e-ff7a-4ed9-adc8-94fafb69e737" />
   </component>
