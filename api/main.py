@@ -12,12 +12,15 @@ from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from doubleLinkedList import DoubleLinkedList
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
+# TODO: Habilitar borrado de usuarios en Administración
+# TODO: Habilitar envío de mensajes al autor del post, al postear un comentario
 # TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML
 
 '''
@@ -391,7 +394,7 @@ def register():
     1. Conecta a la base de datos.
     2. Comprueba si el correo electrónico del usuario ya existe en la base de datos.
     3. Si el correo electrónico ya existe, muestra un mensaje de flash al usuario
-       e lo redirecciona a la página de inicio de sesión.
+       y lo redirecciona a la página de inicio de sesión.
     4. Si el correo electrónico no existe, genera un hash y sal de la contraseña del usuario.
     5. Crea una nueva instancia de la clase 'User' con los datos del formulario.
     6. Añade el nuevo usuario a la sesión de la base de datos.
@@ -411,8 +414,9 @@ def register():
 
         connect_db()
         # Check if user email is already present in the database.
-        result = db.session.execute(db.select(User).where(User.email == form.email.data))
-
+        stmt = db.select(User).where(User.email == form.email.data)
+        result = db.session.execute(stmt)
+        #
         user = result.scalar()
         if user:
             # User already exists
@@ -830,6 +834,19 @@ def show_users():
     users = User.query.all()
     user_data = [{'id': user.id, 'name': user.name, 'email': user.email} for user in users]
     return jsonify({'users': user_data})
+
+@app.route("/delete_user/<int:user_id>")
+@admin_only
+def delete_user(user_id):
+    connect_db()
+    try:
+        user_to_delete = db.get_or_404(User, user_id)
+        db.session.delete(user_to_delete)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        logging.error(f'Error al eliminar el usuario: {e}')
+
+    return redirect(url_for('admin'))
 
 if __name__ == "__main__":
     app.run(port=5001)

@@ -44,6 +44,7 @@
               const idCell = document.createElement('td');
               const nameCell = document.createElement('td');
               const emailCell = document.createElement('td');
+              const actionsCell = document.createElement('td');
 
               idCell.textContent = user.id;
               nameCell.textContent = user.name;
@@ -52,6 +53,41 @@
               row.appendChild(idCell);
               row.appendChild(nameCell);
               row.appendChild(emailCell);
+
+              // Create and configure the delete icon with a link
+              const deleteIcon = document.createElement('i');
+              deleteIcon.classList.add('fas', 'fa-trash', 'text-danger'); // Font Awesome classes for icon and color
+
+              const deleteLink = document.createElement('a');
+              deleteLink.href = `/delete_user/${user.id}`;  // Usamos el id en la ruta
+              deleteLink.appendChild(deleteIcon);
+
+              // Optional confirmation (consider user experience)
+              deleteLink.addEventListener('click', (event) => {
+                if (confirm('¿Estás seguro de que quieres borrar este usuario?')) {
+                    fetch(deleteLink.href, {
+                        method: 'GET',
+                    })
+                    .then(response => {
+                      if (response.ok) {
+                        // Si la eliminación fue exitosa, puedes mostrar un mensaje al usuario o recargar la página
+                        alert('Usuario eliminado correctamente');
+                        // Recargar la página para reflejar los cambios
+                        location.reload();
+                      } else {
+                        console.error('Error al eliminar el usuario');
+                      }
+                    })
+                    .catch(error => {
+                      console.error('Error en la solicitud:', error);
+                    });
+                } else {
+                  event.preventDefault(); // Prevent default link behavior if not confirmed
+                }
+              });
+
+              actionsCell.appendChild(deleteLink);
+              row.appendChild(actionsCell);
 
               userListBody.appendChild(row);
             });
