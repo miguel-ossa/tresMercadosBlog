@@ -1871,6 +1871,9 @@ progress {
   border-color: var(--bs-table-border-color);
 }
 
+thead th {
+  background-color: #cccccc;
+}
 .table-warning {
   --bs-table-color: #000;
   --bs-table-bg: #fff3cd;

@@ -3,32 +3,6 @@
           <div class="container px-4 px-lg-5">
               <div class="row gx-4 gx-lg-5 justify-content-center">
                   <div class="col-md-10 col-lg-8 col-xl-7">
-<!--                      <ul class="list-inline text-center">-->
-<!--                          <li class="list-inline-item">-->
-<!--                              <a href="#!">-->
-<!--                                  <span class="fa-stack fa-lg">-->
-<!--                                      <i class="fas fa-circle fa-stack-2x"></i>-->
-<!--                                      <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>-->
-<!--                                  </span>-->
-<!--                              </a>-->
-<!--                          </li>-->
-<!--                          <li class="list-inline-item">-->
-<!--                              <a href="#!">-->
-<!--                                  <span class="fa-stack fa-lg">-->
-<!--                                      <i class="fas fa-circle fa-stack-2x"></i>-->
-<!--                                      <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>-->
-<!--                                  </span>-->
-<!--                              </a>-->
-<!--                          </li>-->
-<!--                          <li class="list-inline-item">-->
-<!--                              <a href="#!">-->
-<!--                                  <span class="fa-stack fa-lg">-->
-<!--                                      <i class="fas fa-circle fa-stack-2x"></i>-->
-<!--                                      <i class="fab fa-github fa-stack-1x fa-inverse"></i>-->
-<!--                                  </span>-->
-<!--                              </a>-->
-<!--                          </li>-->
-<!--                      </ul>-->
                       <div class="small text-center text-muted fst-italic">Copyright&copy; 3 Mercados 2023</div>
                   </div>
               </div>
@@ -38,5 +12,54 @@
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
       <!-- Core theme JS-->
       <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script>
+    /**
+    * Muestra u oculta la lista de usuarios registrados.
+    *
+    * @function showUsers
+    * @description Realiza una petición AJAX para obtener los usuarios y los muestra en una tabla.
+    */
+    function showUsers() {
+        fetch('/show_users')
+          .then(response => response.json())
+          .then(data => {
+            const userList = document.getElementById('user-list');
+            const showButton = document.querySelector('a[onclick="showUsers()"]');
+
+            if (userList.style.display === 'none') {
+              // Si la lista está oculta, la mostramos y cambiamos el texto del botón
+              userList.style.display = 'block';
+              showButton.textContent = 'Ocultar usuarios';
+            } else {
+              // Si la lista está visible, la ocultamos y cambiamos el texto del botón
+              userList.style.display = 'none';
+              showButton.textContent = 'Mostrar usuarios';
+            }
+            const userListBody = document.getElementById('user-list-body');
+            userListBody.innerHTML = ''; // Limpiar contenido previo de la tabla
+
+            data.users.forEach(user => {
+
+              const row = document.createElement('tr');
+              const idCell = document.createElement('td');
+              const nameCell = document.createElement('td');
+              const emailCell = document.createElement('td');
+
+              idCell.textContent = user.id;
+              nameCell.textContent = user.name;
+              emailCell.textContent = user.email;
+
+              row.appendChild(idCell);
+              row.appendChild(nameCell);
+              row.appendChild(emailCell);
+
+              userListBody.appendChild(row);
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching users:', error);
+          });
+      }
+    </script>
   </body>
 </html>

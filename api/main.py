@@ -1,6 +1,6 @@
 import os
 from datetime import date
-from flask import Flask, abort, render_template, redirect, url_for, flash
+from flask import Flask, abort, render_template, redirect, url_for, flash, jsonify
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 from flask_gravatar import Gravatar
@@ -817,6 +817,37 @@ def contact():
     """
     return render_template("contact.html", current_user=current_user)
 
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+    """
+    Muestra la página de administración.
+
+    Esta función renderiza la plantilla 'admin.html' que permite
+    realizar tareas de administración.
+
+    Args:
+        None
+
+    Returns:
+        template: La plantilla 'admin.html'.
+    """
+    return render_template("admin.html", current_user=current_user)
+
+@app.route("/show_users", methods=["GET", "POST"])
+def show_users():
+    """
+    Muestra una lista de usuarios registrados.
+
+    Esta función recupera todos los usuarios de la base de datos utilizando SQLAlchemy.
+    Luego, formatea los datos como una lista de diccionarios con claves "id", "name" y "email".
+    Finalmente, devuelve la lista de usuarios como un objeto JSON.
+
+    Retorna:
+        JSON: Un objeto JSON que contiene una lista de usuarios con sus IDs, nombres y emails.
+    """
+    users = User.query.all()
+    user_data = [{'id': user.id, 'name': user.name, 'email': user.email} for user in users]
+    return jsonify({'users': user_data})
 
 if __name__ == "__main__":
     app.run(port=5001)
