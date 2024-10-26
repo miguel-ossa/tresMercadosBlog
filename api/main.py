@@ -19,7 +19,6 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-# TODO: Habilitar borrado de usuarios en Administración
 # TODO: Habilitar envío de mensajes al autor del post, al postear un comentario
 # TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML
 
