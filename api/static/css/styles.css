@@ -1877,7 +1877,7 @@ thead th {
 
 td, th {
   border: 1px solid black;
-  width: 300px; /* Establece el ancho de cada celda en 200 píxeles */
+  width: 300px; /* Establece el ancho de cada celda en 300 píxeles */
 }
 
 .table-warning {
