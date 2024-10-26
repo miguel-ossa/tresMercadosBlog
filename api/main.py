@@ -181,11 +181,12 @@ class BlogPost(db.Model):
         id (int): Clave primaria de la publicación.
         author_id (int): Clave foránea que referencia el ID del autor (Usuario).
         author (User): Objeto relacionado con el usuario autor de la publicación.
-        title (str): Título de la publicación (único e obligatorio).
+        title (str): Título de la publicación (único y obligatorio).
         subtitle (str): Subtítulo de la publicación (obligatorio).
         date (str): Fecha de publicación (obligatorio).
         body (str): Contenido de la publicación (obligatorio).
         img_url (str): URL de la imagen de la publicación (obligatorio).
+        email (str): Correo electrónico asociado a la publicación (opcional).
         comments (list[Comment]): Lista de comentarios asociados a la publicación.
     """
     __tablename__ = "blog_posts"
@@ -199,6 +200,7 @@ class BlogPost(db.Model):
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
+    email = db.Column(db.String(100))
     # Parent relationship to the comments
     comments = relationship("Comment", back_populates="parent_post")
 
