@@ -276,24 +276,6 @@ class Comment(db.Model):
 with app.app_context():
     db.create_all()
 
-# def list_users():
-#     users = User.query.all()
-#     user_list = []
-#     for user in users:
-#         user_list.append({
-#             "id": user.id,
-#             "email": user.email,
-#             "name": user.name
-#         })
-#     return user_list
-#
-# @app.route('/users')
-# def get_all_users():
-#     users = list_users()
-#     return jsonify(users)
-
-# Create an admin-only decorator
-
 class RoleChecker:
     """
     Clase auxiliar para verificar los permisos de los usuarios.
