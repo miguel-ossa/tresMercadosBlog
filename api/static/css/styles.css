@@ -1874,6 +1874,12 @@ progress {
 thead th {
   background-color: #cccccc;
 }
+
+td, th {
+  border: 1px solid black;
+  width: 300px; /* Establece el ancho de cada celda en 200 píxeles */
+}
+
 .table-warning {
   --bs-table-color: #000;
   --bs-table-bg: #fff3cd;
