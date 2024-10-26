@@ -46,9 +46,9 @@
               const emailCell = document.createElement('td');
               const actionsCell = document.createElement('td');
 
-              idCell.textContent = user.id;
-              nameCell.textContent = user.name;
-              emailCell.textContent = user.email;
+              idCell.innerHTML = user.id + '&nbsp;';
+              nameCell.innerHTML = user.name + '&nbsp;';
+              emailCell.innerHTML = user.email + '&nbsp;';
 
               row.appendChild(idCell);
               row.appendChild(nameCell);
