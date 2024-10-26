@@ -838,6 +838,24 @@ def show_users():
 @app.route("/delete_user/<int:user_id>")
 @admin_only
 def delete_user(user_id):
+    """
+    Elimina un usuario específico de la base de datos y redirige a la página de administración.
+
+    Esta función elimina el usuario con el `user_id` proporcionado de la base de datos
+    y luego redirige a la vista de administración. Solo se permite el acceso a esta
+    ruta si el usuario tiene privilegios de administrador, lo que se verifica con el
+    decorador `@admin_only`.
+
+    Args:
+        user_id (int): ID del usuario a eliminar de la base de datos.
+
+    Returns:
+        Response: Redirige al usuario a la página de administración tras la eliminación.
+
+    Raises:
+        SQLAlchemyError: En caso de error al eliminar el usuario de la base de datos,
+        se registra un mensaje de error.
+    """
     connect_db()
     try:
         user_to_delete = db.get_or_404(User, user_id)
