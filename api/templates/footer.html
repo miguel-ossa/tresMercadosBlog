@@ -68,19 +68,6 @@
                     fetch(deleteLink.href, {
                         method: 'GET',
                     })
-                    .then(response => {
-                      if (response.ok) {
-                        // Si la eliminación fue exitosa, puedes mostrar un mensaje al usuario o recargar la página
-                        alert('Usuario eliminado correctamente');
-                        // Recargar la página para reflejar los cambios
-                        location.reload();
-                      } else {
-                        console.error('Error al eliminar el usuario');
-                      }
-                    })
-                    .catch(error => {
-                      console.error('Error en la solicitud:', error);
-                    });
                 } else {
                   event.preventDefault(); // Prevent default link behavior if not confirmed
                 }
