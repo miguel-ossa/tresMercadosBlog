@@ -21,8 +21,10 @@ from sendgrid.helpers.mail import Mail
 
 logging.basicConfig(level=logging.DEBUG)
 
-# TODO: Habilitar envío de mensajes al autor del post, al postear un comentario
-# TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML
+# TODO: Añadir el email del remitente en el email generado por el comentario.
+# TODO: Explicar en el about el tema de comentarios para usuarios registrados.
+# TODO: Habilitar que el administrador pueda borrar comentarios.
+# TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML.
 
 '''
 Make sure the required packages are installed: 
@@ -629,7 +631,7 @@ def show_post(post_id):
                 from_email='miguel.ossa@proton.me',
                 to_emails=[requested_post.email],
                 subject='Nuevo comentario en tu post',
-                html_content=f'Has recibido un nuevo comentario en tu post "{requested_post.title}".\n\n{new_comment.text}')
+                html_content=f'Has recibido un nuevo comentario en tu post "{requested_post.title}".\n\n{new_comment.text}\n\nRemitente: {current_user.email}')
             sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
             response = sg.send(message)
         except SQLAlchemyError as e:
