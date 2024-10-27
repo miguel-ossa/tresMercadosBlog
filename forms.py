@@ -15,12 +15,14 @@ class CreatePostForm(FlaskForm):
         title (StringField): Campo de texto para el título de la publicación.
         subtitle (StringField): Campo de texto para el subtítulo de la publicación.
         img_url (StringField): Campo de texto para la URL de la imagen de la publicación.
+        email (StringField): Campo de texto para el email para notificaciones.
         body (CKEditorField): Campo de texto enriquecido para el contenido de la publicación.
         submit (SubmitField): Botón de envío para enviar el formulario.
     """
     title = StringField("Título do post do blogue", validators=[DataRequired()])
     subtitle = StringField("Subtítulo", validators=[DataRequired()])
     img_url = StringField("URL da imagem do blogue", validators=[DataRequired(), URL()])
+    email = StringField("E-mail", validators=[DataRequired()])
     body = CKEditorField("Conteúdo do blogue", validators=[DataRequired()])
     submit = SubmitField("Enviar Post")
 

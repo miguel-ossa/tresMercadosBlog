@@ -16,6 +16,8 @@ from sqlalchemy import create_engine
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from doubleLinkedList import DoubleLinkedList
 import logging
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -576,7 +578,8 @@ def show_post(post_id):
 
     Además, crea un formulario para agregar comentarios utilizando `FormFactory` y solo permite
     comentar a usuarios autenticados. Si el formulario se valida y el usuario está autenticado,
-    crea un nuevo objeto Comment y lo guarda en la base de datos.
+    crea un nuevo objeto Comment y lo guarda en la base de datos, enviando asímismo un email
+    al email registrado en el post.
 
     Finalmente, renderiza la plantilla 'post.html' pasando la publicación solicitada, las
     publicaciones anterior y posterior (si existen), el formulario de comentarios y el usuario
@@ -621,6 +624,14 @@ def show_post(post_id):
         try:
             db.session.add(new_comment)
             db.session.commit()
+            # Enviar el comentario por email al autor del post
+            message = Mail(
+                from_email='miguel.ossa@proton.me',
+                to_emails=[requested_post.email],
+                subject='Nuevo comentario en tu post',
+                html_content=f'Has recibido un nuevo comentario en tu post "{requested_post.title}".\n\n{new_comment.text}')
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+            response = sg.send(message)
         except SQLAlchemyError as e:
             logging.error(f'Erro ao adicionar comentário: {e}')
 
@@ -658,8 +669,9 @@ def add_new_post():
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
-            body=form.body.data,
             img_url=form.img_url.data,
+            body=form.body.data,
+            email=form.email.data,
             author=current_user,
             date=date.today().strftime("%B %d, %Y")
         )
