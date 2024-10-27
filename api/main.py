@@ -821,13 +821,16 @@ def admin():
     return render_template("admin.html", current_user=current_user)
 
 @app.route("/show_users", methods=["GET", "POST"])
+@admin_only
 def show_users():
     """
     Muestra una lista de usuarios registrados.
 
     Esta función recupera todos los usuarios de la base de datos utilizando SQLAlchemy.
     Luego, formatea los datos como una lista de diccionarios con claves "id", "name" y "email".
-    Finalmente, devuelve la lista de usuarios como un objeto JSON.
+    Finalmente, devuelve la lista de usuarios como un objeto JSON. Solo se permite el acceso
+    a esta ruta si el usuario tiene privilegios de administrador, lo que se verifica con el
+    decorador `@admin_only`.
 
     Retorna:
         JSON: Un objeto JSON que contiene una lista de usuarios con sus IDs, nombres y emails.
