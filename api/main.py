@@ -131,7 +131,7 @@ def connect_db():
     Args:
         None
 
-    Returns:
+    Retorna:
         None
 
     Raises:
@@ -153,7 +153,7 @@ def load_user(user_id):
     Args:
         user_id (int): El ID del usuario a cargar.
 
-    Returns:
+    Retorna:
         User: Un objeto de usuario si se encuentra, de lo contrario, devuelve None.
     """
     return db.get_or_404(User, user_id)
@@ -243,7 +243,7 @@ class User(UserMixin, db.Model):
             email (str): Correo electrónico del usuario a autenticar.
             password (str): Contraseña del usuario a autenticar.
 
-        Returns:
+        Retorna:
             User: Objeto User si la autenticación es correcta, None en caso contrario.
         """
         user = User.query.filter_by(email=email).first()
@@ -347,7 +347,7 @@ class FormFactory:
     Args:
         form_type (str): Tipo de formulario a crear ("post", "register", "login", "comment").
 
-    Returns:
+    Retorna:
         Form: Instancia del formulario creado.
 
     Excepciones:
@@ -364,7 +364,7 @@ class FormFactory:
         Args:
             form_type (str): Tipo de formulario a crear ("post", "register", "login", "comment").
 
-        Returns:
+        Retorna:
             Form: Instancia del formulario creado.
 
         Excepciones:
@@ -406,7 +406,7 @@ def register():
     Args:
         None
 
-    Returns:
+    Retorna:
         template: La plantilla 'register.html' con el formulario o un mensaje de flash
                   dependiendo de la solicitud.
     """
@@ -464,7 +464,7 @@ def login():
     Args:
         None
 
-    Returns:
+    Retorna:
         template: La plantilla 'login.html' con el formulario o un mensaje de flash
                   dependiendo de la solicitud.
     """
@@ -491,7 +491,7 @@ def logout():
     Args:
         None
 
-    Returns:
+    Retorna:
         redirect: Redirecciona al usuario a la página principal de publicaciones.
     """
     logout_user()
@@ -508,7 +508,7 @@ def convert_posts_to_dll(posts):
     Args:
         posts (list[Post]): Lista de objetos Post.
 
-    Returns:
+    Retorna:
         DoubleLinkedList: Una Lista Doblemente Enlazada que contiene los IDs de las publicaciones.
     """
     dll = DoubleLinkedList()
@@ -529,7 +529,7 @@ def load_posts():
     En caso de ocurrir un error al acceder a la base de datos, se registra un mensaje de error
     utilizando logging y se devuelve una lista vacía.
 
-    Returns:
+    Retorna:
         list[BlogPost]: Lista de objetos Post con las publicaciones recuperadas, o una lista vacía
                         en caso de error.
     """
@@ -554,7 +554,7 @@ def get_all_posts():
     A continuación, renderiza la plantilla 'index.html' pasando la lista de publicaciones
     y el usuario actual (si está autenticado) al contexto de la plantilla.
 
-    Returns:
+    Retorna:
         template: La plantilla 'index.html' con la lista de publicaciones y el usuario actual.
     """
     posts = load_posts()
@@ -585,7 +585,7 @@ def show_post(post_id):
     Args:
         post_id (int): ID de la publicación a mostrar.
 
-    Returns:
+    Retorna:
         template: La plantilla 'post.html' con la publicación, comentarios, formulario y
                   posibles publicaciones anterior y posterior.
     """
@@ -649,7 +649,7 @@ def add_new_post():
 
     Finalmente, redirecciona al usuario a la página principal con el listado de publicaciones.
 
-    Returns:
+    Retorna:
         template: La plantilla 'make-post.html' con el formulario o redirecciona a la página
                   principal.
     """
@@ -695,7 +695,7 @@ def edit_post(post_id):
     Args:
         post_id (int): ID de la publicación a editar.
 
-    Returns:
+    Retorna:
         template: La plantilla 'make-post.html' con el formulario pre-rellenado o redirecciona a
                   la página de la publicación editada.
     """
@@ -740,7 +740,7 @@ def delete_post(post_id):
     Args:
         post_id (int): ID de la publicación a eliminar.
 
-    Returns:
+    Retorna:
         redirect: Redirecciona al usuario a la página principal.
     """
     connect_db()
@@ -765,7 +765,7 @@ def about():
     Args:
         None
 
-    Returns:
+    Retorna:
         template: La plantilla 'about.html'.
     """
     return render_template("about.html", current_user=current_user)
@@ -782,7 +782,7 @@ def donate():
     Args:
         None
 
-    Returns:
+    Retorna:
         template: La plantilla 'donativos.html'.
     """
     return render_template("donativos.html", current_user=current_user)
@@ -799,7 +799,7 @@ def contact():
     Args:
         None
 
-    Returns:
+    Retorna:
         template: La plantilla 'contact.html'.
     """
     return render_template("contact.html", current_user=current_user)
@@ -815,7 +815,7 @@ def admin():
     Args:
         None
 
-    Returns:
+    Retorna:
         template: La plantilla 'admin.html'.
     """
     return render_template("admin.html", current_user=current_user)
@@ -853,7 +853,7 @@ def delete_user(user_id):
     Args:
         user_id (int): ID del usuario a eliminar de la base de datos.
 
-    Returns:
+    Retorna:
         Response: Redirige al usuario a la página de administración tras la eliminación.
 
     Raises:
