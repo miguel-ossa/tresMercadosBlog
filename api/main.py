@@ -21,7 +21,6 @@ from sendgrid.helpers.mail import Mail
 
 logging.basicConfig(level=logging.DEBUG)
 
-# TODO: Añadir el email del remitente en el email generado por el comentario.
 # TODO: Explicar en el about el tema de comentarios para usuarios registrados.
 # TODO: Habilitar que el administrador pueda borrar comentarios.
 # TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML.
