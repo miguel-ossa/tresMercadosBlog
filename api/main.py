@@ -21,8 +21,7 @@ from sendgrid.helpers.mail import Mail
 
 logging.basicConfig(level=logging.DEBUG)
 
-# TODO: Explicar en el about el tema de comentarios para usuarios registrados.
-# TODO: Habilitar que el administrador pueda borrar comentarios.
+# TODO: Habilitar que el administrador pueda borrar comentarios desde Administración.
 # TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML.
 
 '''
@@ -629,7 +628,7 @@ def show_post(post_id):
             message = Mail(
                 from_email='miguel.ossa@proton.me',
                 to_emails=[requested_post.email],
-                subject='Nuevo comentario en tu post',
+                subject='Nuevo comentario en tu post en tres-mercados-blog.vercel.app',
                 html_content=f'Has recibido un nuevo comentario en tu post "{requested_post.title}".\n\n{new_comment.text}\n\nRemitente: {current_user.email}')
             sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
             response = sg.send(message)
