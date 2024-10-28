@@ -787,7 +787,7 @@ def delete_comment(post_id, comment_id):
         comment_id (int): ID del comentario a eliminar.
 
     Retorna:
-        redirect: Redirecciona al usuario a la página principal.
+        redirect: Redirecciona al usuario a la publicación actual.
     """
     connect_db()
     try:
