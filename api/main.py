@@ -21,7 +21,6 @@ from sendgrid.helpers.mail import Mail
 
 logging.basicConfig(level=logging.DEBUG)
 
-# TODO: Habilitar que el administrador pueda borrar comentarios desde Administración.
 # TODO: traducir las fechas del inglés al portugués, al mostrarlas en el HTML.
 
 '''
@@ -144,21 +143,6 @@ def connect_db():
     except SQLAlchemyError as e:
         logging.error(f"Erro ao ligar à base de dados: {e}")
 
-
-@login_manager.user_loader
-def load_user(user_id):
-    """
-    Carga un usuario de la base de datos.
-
-    Esta función es utilizada por Flask-Login para cargar un usuario a partir de su ID.
-
-    Args:
-        user_id (int): El ID del usuario a cargar.
-
-    Retorna:
-        User: Un objeto de usuario si se encuentra, de lo contrario, devuelve None.
-    """
-    return db.get_or_404(User, user_id)
 
 # CONNECT TO DB
 # sqlite:///posts.db
@@ -443,6 +427,21 @@ def register():
         return redirect(url_for("get_all_posts"))
 
     return render_template("register.html", form=form, current_user=current_user)
+
+@login_manager.user_loader
+def load_user(user_id):
+    """
+    Carga un usuario de la base de datos.
+
+    Esta función es utilizada por Flask-Login para cargar un usuario a partir de su ID.
+
+    Args:
+        user_id (int): El ID del usuario a cargar.
+
+    Retorna:
+        User: Un objeto de usuario si se encuentra, de lo contrario, devuelve None.
+    """
+    return db.get_or_404(User, user_id)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -765,6 +764,40 @@ def delete_post(post_id):
         logging.error(f'Erro ao eliminar uma publicação: {e}')
 
     return redirect(url_for('get_all_posts'))
+
+@app.route("/delete_comment/<int:post_id>/<int:comment_id>")
+@admin_only
+def delete_comment(post_id, comment_id):
+    """
+    Elimina un comentario de una publicación.
+
+    Esta función restringida por el decorador `admin_only` permite a los usuarios
+    administradores eliminar comentarios del blog.
+
+    Recupera el comentario solicitado por su ID utilizando `db.get_or_404`.
+    Luego elimina el comentario de la base de datos.
+
+    En caso de ocurrir un error al acceder a la base de datos, se registra un mensaje
+    de error utilizando logging.
+
+    Finalmente, redirecciona al usuario a la página principal con el listado de publicaciones.
+
+    Args:
+        post_id (int): ID de la publicación actual
+        comment_id (int): ID del comentario a eliminar.
+
+    Retorna:
+        redirect: Redirecciona al usuario a la página principal.
+    """
+    connect_db()
+    try:
+        comment_to_delete = db.get_or_404(Comment, comment_id)
+        db.session.delete(comment_to_delete)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        logging.error(f'Erro ao eliminar um comentário: {e}')
+
+    return redirect(url_for("show_post", post_id=post_id))
 
 
 @app.route("/about")
