@@ -780,7 +780,7 @@ def delete_comment(post_id, comment_id):
     En caso de ocurrir un error al acceder a la base de datos, se registra un mensaje
     de error utilizando logging.
 
-    Finalmente, redirecciona al usuario de nuevo a la publicación actual.
+    Finalmente, redirecciona de nuevo al usuario a la publicación actual.
 
     Args:
         post_id (int): ID de la publicación actual
