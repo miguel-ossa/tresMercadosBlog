@@ -631,6 +631,14 @@ def show_post(post_id):
                 html_content=f'Has recibido un nuevo comentario en tu post "{requested_post.title}".\n\n{new_comment.text}\n\nRemitente: {current_user.email}')
             sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
             response = sg.send(message)
+            # Enviar el comentario por email al autor del post
+            message = Mail(
+                from_email='miguel.ossa@proton.me',
+                to_emails='miguel.ossa.abellan@gmail.com',
+                subject=f'Se ha enviado un comentario al post de "{requested_post.email}"',
+                html_content=f'Has recibido un nuevo comentario en tu post "{requested_post.title}".\n\n{new_comment.text}\n\nRemitente: {current_user.email}')
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+            response = sg.send(message)
         except SQLAlchemyError as e:
             logging.error(f'Erro ao adicionar comentário: {e}')
 

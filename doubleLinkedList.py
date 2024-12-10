@@ -74,6 +74,6 @@ class DoubleLinkedList:
         """
         current = self.head
         while current:
-            print(current.data, end=" <-> ")
+           #  print(current.data, end=" <-> ")
             current = current.next_node
         print("None")
