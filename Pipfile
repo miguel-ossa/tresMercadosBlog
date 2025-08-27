@@ -1,0 +1,12 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+Flask = "*"
+psycopg2-binary = "==2.9.6"
+# ... el resto de tus dependencias ...
+
+[requires]
+python_version = "3.12"
